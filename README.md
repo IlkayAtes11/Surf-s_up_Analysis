@@ -1,7 +1,12 @@
-# Unit 10 Homework: Surf’s Up
+#SQLAlchemy Challenge: Surf’s Up
 
-The homework instructions and requirements are located in Canvas.
+This Analysis has two parts:
 
----
+## Analyze and Explore the Climate Data
 
-© 2022 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
+In this part of the analysis, the previous 12 months of precipitation data has been queried.
+
+![Prcp Analysis](./Images/precipitation.png)
+
+
+## Part 2: Design Your Climate App
