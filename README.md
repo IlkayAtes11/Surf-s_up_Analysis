@@ -1,12 +1,26 @@
-#SQLAlchemy Challenge: Surf’s Up
+# SQLAlchemy Challenge: Surf’s Up
 
 This Analysis has two parts:
 
 ## Analyze and Explore the Climate Data
 
-In this part of the analysis, the previous 12 months of precipitation data has been queried.
+In this part of the analysis, 
+
+* The previous 12 months of precipitation data
 
 ![Prcp Analysis](./Images/precipitation.png)
 
+* The total number of stations in the dataset.
 
-## Part 2: Design Your Climate App
+* The most-active stations
+
+* The lowest, highest, and average temperatures of the most-active station id found in the previous query.
+
+* The previous 12 months of temperature observation (TOBS) data of the most active station
+
+![Prcp Analysis](./Images/tobs.png)
+
+
+## Design Your Climate App
+
+A Flask API based on the queries that has been just developed was created.
