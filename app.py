@@ -20,6 +20,9 @@ Base.prepare(autoload_with=engine)
 Measurement = Base.classes.measurement
 Station = Base.classes.station
 
+# Create our session (link) from Python to the DB
+session = Session(engine)
+
 # Flask Setup
 
 from flask import Flask
@@ -42,68 +45,71 @@ def welcome():
 
 # Precipitation Analysis
 @app.route("/api/v1.0/precipitation")
-
 def precipitation():
-
-    # Create our session (link) from Python to the DB
-    session = Session(engine)
 
     # Query the last 12 months of precipitation data
     last_12_months_prcp = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date >= '2016-08-23').all()
-
-    session.close()
-
-   # Dict with date as the key and prcp as the value
-    date_precipitation = {date: prcp for date, prcp in precipitation}
-
-    return jsonify(date_precipitation)
+    
+    last_12_months_prcp_dict = dict(last_12_months_prcp)
+    
+    return jsonify(last_12_months_prcp_dict)
 
 # List of Stations
 @app.route("//api/v1.0/stations")
 def stations():
 
-# Create our session (link) from Python to the DB
-    session = Session(engine)
-
 # Query the names of the all stations
     stations = session.query(Station.name).all()
 
     session.close()
-    stations = list(np.ravel(stations))
-    return jsonify(stations)
+    stations_dict = dict(stations)
+    return jsonify(stations_dict)
 
 # Most Active Station
 @app.route("/api/v1.0/tobs")
 def tobs():
 
-# Create our session (link) from Python to the DB
-    session = Session(engine)
-
 # Query the most active stations`s date and temperature observations
     active_station= session.query(Measurement.station, Measurement.date, Measurement.tobs).filter_by(station = 'USC00519281').filter(Measurement.date >= '2016-08-23').all()
 
-    session.close()
-
-    active_station = list(np.ravel(active_station))
+    active_station_dict = dict(active_station)
     return jsonify(active_station)
 
-# Min, Max and Avg 
-@app.route("/api/v1.0/<start>")
-@app.route("/api/v1.0/<start>/<end>")
 
-def max_avg_min():
+@app.route("/api/v1.0/start")
+def start(start):
 
-# Create our session (link) from Python to the DB
-    session = Session(engine)
+    min_avg_max = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs),func.max(Measurement.tobs)).filter(Measurement.date >= start).all()
+    
+    tobs = []
 
-# Query the most active stations`s date and temperature observations
-    active_station= session.query(Measurement.station, Measurement.date, Measurement.tobs).filter_by(station = 'USC00519281').filter(Measurement.date >= '2016-08-23').all()
+    for min,avg,max in min_avg_max:
+        tobs_dict = {}
+        tobs_dict["Min"] = min
+        tobs_dict["Average"] = avg
+        tobs_dict["Max"] = max
+        tobs.append(tobs_dict)
+        
+    return jsonify(tobs)
 
-    session.close()
+@app.route("/api/v1.0/start_end")
+def start_end(start,end):
+    minavgmax_start_end = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs),\
+                func.max(Measurement.tobs)).filter(Measurement.date >= start).\
+                filter(Measurement.date <= end).all()
 
-    active_station = list(np.ravel(active_station))
-    return jsonify(active_station)
+    tobs = []
+    for min,avg,max in minavgmax_start_end:
+        tobs_dict = {}
+        tobs_dict["Min"] = min
+        tobs_dict["Average"] = avg
+        tobs_dict["Max"] = max
+        tobs.append(tobs_dict)
 
+    return jsonify(tobs)
+
+
+    session.close
 
 
 if __name__ == "__main__":
