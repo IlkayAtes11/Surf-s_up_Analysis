@@ -8,7 +8,7 @@ In this part of the analysis,
 
 * The previous 12 months of precipitation data
 
-![Prcp Analysis](./Images/precipitation.png)
+![Prcp Analysis](./images/precipitation.png)
 
 * The total number of stations in the dataset.
 
@@ -18,7 +18,7 @@ In this part of the analysis,
 
 * The previous 12 months of temperature observation (TOBS) data of the most active station
 
-![Prcp Analysis](./Images/tobs.png)
+![Prcp Analysis](./images/tobs.png)
 
 
 ## Design Your Climate App
